@@ -1,0 +1,76 @@
+方法1 暴力解法 空间复杂度o(n) 时间复杂度o(n)
+class Solution {
+public:
+    int findRepeatNumber(vector<int>& nums) {
+        int currency[100000]={0};
+        int result;
+        for(std::vector<int>::iterator it = nums.begin();it != nums.end();it++){
+            if(currency[*it]==1){
+                result=*it;
+                break;
+            }   
+            else currency[*it]++;
+        }
+        return result;
+    }
+};
+方法2 hash表 空间复杂度o(n) 时间复杂度o(n) 时间复杂度低于普通map(无需对key在存储时排序)
+class Solution {
+public:
+    int findRepeatNumber(vector<int>& nums) {
+        unordered_map<int,int> currency;
+        int result;
+        for(std::vector<int>::iterator it = nums.begin();it != nums.end();it++){
+            if(currency[*it]){
+                result=*it;
+                break;
+            }   
+            else currency[*it]=1;
+        }
+        return result;
+    }
+};
+方法3 标记法 时间复杂度o(n) 空间复杂度o(1)
+class Solution {
+public:
+    int findRepeatNumber(vector<int>& nums) {
+        int index;
+        for(int i=0;i<nums.size();i++)nums[i]++;
+        for(int i=0;i<nums.size();i++){
+            index = abs(nums[i])-1;
+            if (nums[index]<0)return index;
+            else nums[index]*=-1;
+        }
+        return 0;
+    }
+};
+
+时间复杂度极高的递归写法
+class Solution {
+public:
+    int count(int start,int end,vector<int>& nums){
+            int c=0;
+            for(int i=0;i<nums.size();i++)c=(nums[i]>=start&&nums[i]<=end)?++c:c;
+            return c;
+    }
+    int regress(int start,int end, vector<int>& nums){
+        int flag=0;
+        int mid = (start+end)/2;
+        if(start<end){
+            if (count(start,mid,nums)>=2)flag=1;
+            if (count(mid+1,end,nums)>=2)flag=(flag==1?2:3);
+        }
+        else{
+            if (count(start,end,nums)>=2)return start;
+            else return 0;
+        }
+        if(flag==1)return regress(start,mid,nums);
+        else if(flag==2) return regress(start,mid,nums)>regress(mid+1,end,nums)?regress(start,mid,nums):regress(mid+1,end,nums);
+        else if(flag==3) return regress(mid+1,end,nums);
+        else return 0;
+    }
+    int findRepeatNumber(vector<int>& nums) {
+        int start=0,end=nums.size()-1;
+        return regress(start,end,nums);
+    }
+};
