@@ -1,0 +1,23 @@
+class CQueue {
+public:
+    stack<int> sa,sb;
+    CQueue() {
+    }
+    
+    void appendTail(int value) {
+        sa.push(value);
+    }
+    
+    int deleteHead() {
+        if(sb.empty()){
+            while(!sa.empty()){
+                sb.push(sa.top());
+                sa.pop();
+            }
+        }
+        if(sb.empty())return -1;
+        int ret = sb.top();
+        sb.pop();
+        return ret;
+    }
+};
