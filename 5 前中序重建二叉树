@@ -1,0 +1,58 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 1.递归写法
+class Solution {
+public:
+    unordered_map<int,int> in_map;//inorder's value->index
+    vector<int> Preorder;
+    TreeNode* build(int start,int end,int index){
+        if(start>end)return NULL;
+        TreeNode* node = new TreeNode(Preorder[index]);
+        // if (index>=Preorder.size())return node;
+        int inorder_index = in_map[Preorder[index]];
+        node->left = build(start,inorder_index-1,index+1);
+        node->right = build(inorder_index+1,end,index+(inorder_index-start)+1);
+        return node;
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        for(int i=0;i<preorder.size();i++)in_map[inorder[i]]=i;
+        Preorder = preorder;
+        TreeNode* root = build(0,preorder.size()-1,0);
+        return root;
+    }
+};
+2.迭代写法
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        stack<TreeNode*> pre_stack;
+        if(preorder.size()==0)return NULL;
+        TreeNode* root = new TreeNode(preorder[0]);
+        TreeNode* node = root;
+        for(int i=1,j=0;i<preorder.size();i++){
+            if(node->val!=inorder[j]){
+                node->left = new TreeNode(preorder[i]);
+                pre_stack.push(node);
+                node = node->left;
+            }
+            else{
+                j++;
+                while(!pre_stack.empty() && pre_stack.top()->val==inorder[j]){
+                    node = pre_stack.top();
+                    pre_stack.pop();
+                    j++;
+                }
+                node->right = new TreeNode(preorder[i]);
+                node = node->right;
+            }
+        }
+        return root;
+    }
+};
