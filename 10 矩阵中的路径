@@ -1,0 +1,62 @@
+1.基于栈的深度搜索
+深度搜索用栈改写比较简单,就是注意回溯的时候如果回溯到上一步则还原,用一个新的栈deepnode来记录之前一步的位置.这种写法是为了解决当栈顶无法走通需要回退时,如何确定栈的上一个元素是父节点还是兄弟节点.
+执行用时打败 47.5% 内存消耗打败54.08%
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        stack<pair<int,int>> st,deepnote;
+        int index=0;
+        if(word.size()==0) return true;
+        for(int i=0;i<board.size();i++)
+            for(int j=0;j<board[0].size();j++)
+                st.push(pair(i,j));
+        while(!st.empty()){
+            int posx=st.top().first,posy=st.top().second;
+            if(posx<0||posx>board.size()-1||posy<0||posy>board[0].size()-1){
+                st.pop();
+            }
+            else if(board[posx][posy]==word[index]&& board[posx][posy]!='/'){
+                if(index==word.size()-1)return true;
+                board[posx][posy]='/';
+                index++;
+                deepnote.push(pair(posx,posy));
+                st.push(pair(posx,posy+1));
+                st.push(pair(posx,posy-1));
+                st.push(pair(posx+1,posy));
+                st.push(pair(posx-1,posy));
+            }else{
+                if(!deepnote.empty()&&deepnote.top()==st.top()){
+                    index--;
+                    board[posx][posy]=word[index];
+                    deepnote.pop();
+                    st.pop();
+                }
+                else st.pop();
+            }
+
+        }
+        return false;
+    }
+};
+2.递归dfs
+class Solution {
+public:
+    vector<vector<char>> Board;
+    string Word;
+    bool dfs(int x,int y,int index){
+        if(x<0||y<0||x>Board.size()-1||y>Board[0].size()-1||Board[x][y]!=Word[index]) return false;
+        Board[x][y]='/';
+        if(index+1 == Word.size()) return true;
+        if(dfs(x+1,y,index+1)||dfs(x-1,y,index+1)||dfs(x,y+1,index+1)||dfs(x,y-1,index+1))return true;
+        Board[x][y] = Word[index];
+        return false;
+    }
+    bool exist(vector<vector<char>>& board, string word) {
+        Board=board,Word=word;
+        if(word.size()==0) return true;
+        for(int i=0;i<board.size();i++)
+            for(int j=0;j<board[0].size();j++)
+                if(dfs(i,j,0))return true;
+        return false;
+    }
+};
