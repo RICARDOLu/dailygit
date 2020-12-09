@@ -1,0 +1,31 @@
+dfs遍历 注意start的变化 
+class Solution {
+public:
+    vector<int> out;
+    int start,number_nine;
+    void dfs(int pos,int length,string &tmp){
+        if(pos==length){
+            if(start==length-1&&tmp[length-1]=='0')return;
+            out.push_back(stoi(tmp.substr(start)));
+            // out.push_back(stoi(tmp));
+        }
+        else{
+            for(int i=0;i<10;i++){
+                tmp[pos] = i+'0';
+                if(i==9)number_nine++;
+                dfs(pos+1,length,tmp);
+                if(number_nine==length-start)start-=1;
+            }
+            number_nine--;
+        }
+        return;
+    }
+
+    vector<int> printNumbers(int n) {
+        start = n-1;
+        number_nine = 0;
+        string tmp(n,'/');
+        dfs(0,n,tmp);
+        return out;
+    }
+};
