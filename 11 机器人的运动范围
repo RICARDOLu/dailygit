@@ -1,0 +1,52 @@
+1. bfs
+class Solution {
+public:
+    int movingCount(int m, int n, int k) {
+        const int a=m,b=n;
+        vector<vector<int>> sum(m,vector<int>(n,0));  
+        int res=0;
+        queue<pair<int,int>> bqueue;
+        bqueue.push(pair(0,0));
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                // if(i+j<=k)sum++;
+                if((i%10+i/10+j%10+j/10)<=k)sum[i][j]=1;
+            }
+        }
+        while(!bqueue.empty()){
+            int i,j;
+            i = bqueue.front().first,j=bqueue.front().second;
+            if(i<m&&i>=0&&j<n&&j>=0&&sum[i][j]==1){
+                // bqueue.push(pair(i+1,j));
+                bqueue.push(pair(i-1,j));
+                bqueue.push(pair(i,j+1));
+                // bqueue.push(pair(i,j-1));
+                //tip:可以只探测向右和向下的位置
+                if(sum[i][j]==1)sum[i][j]=2,res++;
+            }
+            bqueue.pop();
+        }
+        return res;
+    }
+};
+2.dp
+所有可达点都可由已可达点向下向右扩展得到
+class Solution {
+public:
+    int movingCount(int m, int n, int k) {
+        vector<vector<int>> able_to_get(m,vector<int>(n,0));  
+        int count=0;
+        able_to_get[0][0]=1;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if((i%10+i/10+j%10+j/10)>k)continue;
+                else{
+                    if(i-1>=0)able_to_get[i][j]|=able_to_get[i-1][j];
+                    if(j-1>=0)able_to_get[i][j]|=able_to_get[i][j-1];
+                }
+                if(able_to_get[i][j])count++;
+            }
+        }
+        return count;
+    }
+};
