@@ -29,3 +29,4 @@ public:
         return out;
     }
 };
+//同时注意 string tmp = *new string[n] tmp.size()未被初始化使得string函数无法正常使用
