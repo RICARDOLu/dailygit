@@ -1,0 +1,17 @@
+如果给出被删除节点指针 将后一个节点的值赋给被删除节点后删除后一个节点
+class Solution {
+public:
+    ListNode* deleteNode(ListNode* head, int val) {
+        ListNode* root = new ListNode();
+        ListNode* pre = root;
+        root->next = head;
+        while(head){
+            if(head->val==val){
+                pre->next=head->next;
+                break;
+            }
+            head=head->next,pre=pre->next;
+        }
+        return root->next;
+    }
+};
