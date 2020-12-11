@@ -1,0 +1,39 @@
+1.递归法
+class Solution {
+public:
+    bool compare(TreeNode *a,TreeNode *b,bool continuejudge){
+        if(b==NULL)return true;
+        else if(a==NULL)return false;
+        else{
+            if(continuejudge){
+                if(a->val==b->val)   
+                    return compare(a->left,b->left,true)&&compare(a->right,b->right,true);
+                else return false;
+            }else{
+                if(a->val==b->val){
+                    // pritln("test");
+                    return (compare(a->left,b->left,true)&&compare(a->right,b->right,true))||compare(a->left,b,false)||compare(a->right,b,false);
+                }
+                else return compare(a->left,b,false)||compare(a->right,b,false); 
+            }
+        }
+        return true;//no use
+    }
+    bool isSubStructure(TreeNode* A, TreeNode* B) {
+        if(!B)return false;
+        return compare(A,B,false);
+    }
+};
+2.双重递归(判断是否是某个子结构+判断两树结构)
+class Solution {
+public:
+    bool recur(TreeNode* a,TreeNode* b){
+        if(!b)return true;
+        if(!a||a->val!=b->val)return false;
+        else return recur(a->left,b->left)&&recur(a->right,b->right);
+    }
+    bool isSubStructure(TreeNode* A, TreeNode* B) {
+        if(!B)return false;
+        return recur(A,B)||(A&&(isSubStructure(A->left,B)||isSubStructure(A->right,B)));
+    }
+};
