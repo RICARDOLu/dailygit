@@ -1,0 +1,14 @@
+双指针
+class Solution {
+public:
+    ListNode* getKthFromEnd(ListNode* head, int k) {
+        ListNode* fast=head;
+        while(k--){
+            fast=fast->next;
+        }
+        while(fast){
+            fast=fast->next,head=head->next;
+        }
+        return head;
+    }
+};
