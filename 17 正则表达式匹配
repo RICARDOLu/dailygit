@@ -1,0 +1,54 @@
+1.dp
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int m = s.size(),n=p.size();
+        vector<vector<int>> dp(m+1,vector<int>(n+1,0));
+        for(int i=0;i<=m;i++){
+            for(int j=0;j<=n;j++){
+                if(j==0){
+                    dp[i][j]= (i==0?1:0);
+                }else{
+                    if(p[j-1]!='*'){
+                        if(i>0&&(p[j-1]=='.'||p[j-1]==s[i-1])) {
+                            dp[i][j]=dp[i-1][j-1];   
+                        }
+                    }
+                    else{
+                        //匹配1个
+                        if(i>=1&&(s[i-1]==p[j-2]||p[j-2]=='.'))
+                            dp[i][j]|=dp[i-1][j];
+                        dp[i][j]|=dp[i][j-2];//消去x*
+                    }
+                }
+            }
+        }
+        return dp[m][n];
+    }  
+};
+2.dfs
+class Solution {
+public:
+    string s,p;
+    bool dfs(int sindex,int pindex){
+        if(pindex==-1)return sindex==-1;
+        else{
+            if(p[pindex]!='*'){
+                if(sindex>=0&&(s[sindex]==p[pindex]||p[pindex]=='.'))
+                    return dfs(sindex-1,pindex-1);
+                return false;
+            }
+            else{
+                bool res;
+                if(pindex>=1&&sindex>=0&&(p[pindex-1]=='.'||(p[pindex-1]==s[sindex]))) res=dfs(sindex-1,pindex);
+                res=res||dfs(sindex,pindex-2);
+                return res;
+            }
+        }
+        return false;
+    }
+    bool isMatch(string s1, string p1) {
+        s=s1,p=p1;
+        return dfs(s.size()-1,p.size()-1);
+    }
+};
