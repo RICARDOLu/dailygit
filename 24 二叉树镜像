@@ -1,0 +1,28 @@
+1.递归
+class Solution {
+public:
+    TreeNode* mirrorTree(TreeNode* root) {
+        if(!root)return NULL;
+        TreeNode *tmp = root->left;
+        root->left=root->right,root->right=tmp;
+        mirrorTree(root->left);
+        mirrorTree(root->right);
+        return root;
+    }
+};
+2.栈
+class Solution {
+public:
+    TreeNode* mirrorTree(TreeNode* root) {
+        stack<TreeNode*> s;
+        if(root)s.push(root);
+        while(!s.empty()){
+            TreeNode* tmp=s.top(),*t;
+            s.pop();
+            if(tmp->right)s.push(tmp->right);
+            if(tmp->left)s.push(tmp->left);
+            t = tmp->left,tmp->left=tmp->right,tmp->right=t;
+        } 
+        return root;
+    }
+};
