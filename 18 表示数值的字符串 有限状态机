@@ -1,0 +1,91 @@
+class Solution {
+public:
+    enum State{
+        STATE_START,
+        STATE_SIGN,
+        STATE_NUMBER,
+        STATE_POINT,
+        STATE_POINTWITHOUTNUMBER,
+        STATE_FRACTION,
+        STATE_EXP,
+        STATE_EXPSIGN,
+        STATE_EXPNUMBER,
+        STATE_END,
+    };
+    enum Chartype{
+        CHAR_NUMBER,
+        CHAR_SIGN,
+        CHAR_SPACE,
+        CHAR_EXP,
+        CHAR_POINT,
+        CHAR_ILLEGAL
+    };
+    Chartype gettype(char x){
+        if(x>='0'&&x<='9')return CHAR_NUMBER;
+        if(x=='+'||x=='-')return CHAR_SIGN;
+        if(x==' ')return CHAR_SPACE;
+        if(x=='e'||x=='E')return CHAR_EXP;
+        if(x=='.')return CHAR_POINT;
+        return CHAR_ILLEGAL;
+    }
+    bool isNumber(string s) {
+        unordered_map<State,unordered_map<Chartype,State>> transfer{
+            {
+                STATE_START,{
+                    {CHAR_SPACE,STATE_START},
+                    {CHAR_SIGN,STATE_SIGN},
+                    {CHAR_NUMBER,STATE_NUMBER},
+                    {CHAR_POINT,STATE_POINTWITHOUTNUMBER},
+                },
+            },
+            {
+                    STATE_SIGN,{
+                    {CHAR_NUMBER,STATE_NUMBER},
+                    {CHAR_POINT,STATE_POINTWITHOUTNUMBER},
+                },
+            },
+                {STATE_NUMBER,{
+                    {CHAR_NUMBER,STATE_NUMBER},
+                    {CHAR_POINT,STATE_POINT},
+                    {CHAR_EXP,STATE_EXP},
+                    {CHAR_SPACE,STATE_END},
+                },},
+                {STATE_POINT,{
+                    {CHAR_NUMBER,STATE_FRACTION},
+                    {CHAR_EXP,STATE_EXP},
+                    {CHAR_SPACE,STATE_END},
+                },},
+                {STATE_POINTWITHOUTNUMBER,{
+                    {CHAR_NUMBER,STATE_FRACTION},
+                },},
+                {STATE_FRACTION,{
+                    {CHAR_NUMBER,STATE_FRACTION},
+                    {CHAR_EXP,STATE_EXP},
+                    {CHAR_SPACE,STATE_END},
+                },},
+                {STATE_EXP,{
+                    {CHAR_NUMBER,STATE_EXPNUMBER},
+                    {CHAR_SIGN,STATE_EXPSIGN},
+                },},
+                {STATE_EXPSIGN,{
+                    {CHAR_NUMBER,STATE_EXPNUMBER},
+                },},
+                {STATE_EXPNUMBER,{
+                    {CHAR_NUMBER,STATE_EXPNUMBER},
+                    {CHAR_SPACE,STATE_END},
+                },},
+                {STATE_END,{
+                    {CHAR_SPACE,STATE_END},
+                },},
+        };
+        State now_state=STATE_START;
+        for(int i=0;i<s.size();i++){
+            if(transfer[now_state].find(gettype(s[i]))==transfer[now_state].end())
+                return false;
+            now_state = transfer[now_state][gettype(s[i])];
+        }
+        if(now_state==STATE_NUMBER||now_state==STATE_POINT||now_state==STATE_FRACTION||now_state==STATE_EXPNUMBER||now_state==STATE_END)
+        return true;
+        return false;
+    }
+};
