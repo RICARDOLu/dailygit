@@ -40,3 +40,22 @@ public:
         return res;
     }
 };
+3 递归
+class Solution {
+public:
+    vector<int> res;
+
+    void recurse(int top,int left,int bottom,int right,vector<vector<int>> &matrix){
+        if(top>bottom||left>right)return;
+        for(int i=left;i<=right;i++)res.push_back(matrix[top][i]);
+        for(int i=top+1;i<=bottom;i++)res.push_back(matrix[i][right]);
+        for(int i=right-1;i>=left&&top<bottom;i--)res.push_back(matrix[bottom][i]);
+        for(int i=bottom-1;i>top&&left<right;i--)res.push_back(matrix[i][left]);
+        return recurse(top+1,left+1,bottom-1,right-1,matrix);
+    }
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        if(!matrix.size()||!matrix[0].size())return res;
+        recurse(0,0,matrix.size()-1,matrix[0].size()-1,matrix);
+        return res;
+    }
+};
