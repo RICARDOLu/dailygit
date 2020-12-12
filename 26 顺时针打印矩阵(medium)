@@ -1,0 +1,42 @@
+1.循环法 时间复杂度o(mn) 空间复杂度 o(mn);
+class Solution {
+public:
+    
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> res;
+        if(!matrix.size()||!matrix[0].size())return res;
+        int i=0,j=0,direction=0;
+        vector<vector<bool>> trail(matrix.size(),vector<bool>(matrix[0].size(),false));
+        pair<int,int> dir[4]={pair(0,1),pair(1,0),pair(0,-1),pair(-1,0)};
+        while(i<matrix.size()&&j<matrix[0].size()&&!trail[i][j]){
+            res.push_back(matrix[i][j]);
+            trail[i][j]=true;
+            if((i+dir[direction].first)>=matrix.size()||j+dir[direction].second>=matrix[0].size()||trail[i+dir[direction].first][j+dir[direction].second]){
+                direction=(direction+1)%4;
+            }
+            i +=dir[direction].first,j+=dir[direction].second;
+        }
+        return res;
+    }
+};
+循环法2 空间复杂度o(1)
+class Solution {
+public:
+    
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> res;
+        if(!matrix.size()||!matrix[0].size())return res;
+        int i=0,j=0,direction=0;
+        pair<int,int> dir[4]={pair(0,1),pair(1,0),pair(0,-1),pair(-1,0)};
+        pair<int,int> trail[4]={pair(0,0),pair(-1,-1),pair(-1,-1),pair(-1,-1)};
+        while(i<matrix.size()&&j<matrix[0].size()&&(i!=trail[(direction+1)%4].first||j!=trail[(direction+1)%4].second)){
+            res.push_back(matrix[i][j]);
+            if(i+dir[direction].first>=matrix.size()||j+dir[direction].second>=matrix[0].size()||(trail[(direction+1)%4].first==i+dir[direction].first&&trail[(direction+1)%4].second==j+dir[direction].second)){
+                direction = (direction+1)%4;
+                trail[direction] = pair(i+dir[direction].first,j+dir[direction].second);
+            }
+            i+=dir[direction].first,j+=dir[direction].second;
+        }
+        return res;
+    }
+};
