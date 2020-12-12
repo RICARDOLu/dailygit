@@ -1,0 +1,51 @@
+1.bfs 
+class Solution {
+public:
+    vector<int> levelOrder(TreeNode* root) {
+        queue<TreeNode*> bfs;
+        vector<int> res;
+        bfs.push(root);
+        while(!bfs.empty()){
+            root = bfs.front();
+            bfs.pop();
+            if(root){
+                res.push_back(root->val);
+                if(root->left)bfs.push(root->left);
+                if(root->right)bfs.push(root->right);
+            }
+        }
+        return res;
+    }
+};
+2. 带标记的bfs
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> res(1);
+        TreeNode *tmplast,*last=root;
+        queue<TreeNode*> que;
+        que.push(root);
+        while(!que.empty()){
+            root = que.front();
+            que.pop();
+            if(root){
+                res[res.size()-1].push_back(root->val);
+                if(root->left){
+                    que.push(root->left);
+                    tmplast = root->left;
+                }
+                if(root->right){
+                    que.push(root->right);
+                    tmplast = root->right;
+                }
+                if(root==last){
+                    last=tmplast;
+                    res.push_back(vector<int>(0));
+                }
+            }
+        }
+        if(res[res.size()-1].empty())res.pop_back();
+        return res;
+    }
+};
+3.可用dfs递归实现(保存在res[][]里)
