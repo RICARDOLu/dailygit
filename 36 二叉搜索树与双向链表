@@ -1,0 +1,19 @@
+class Solution {
+public:
+    Node* prenode = NULL,*firstnode;
+    void inorder(Node* node){
+        if(node->left)inorder(node->left);
+        if(prenode) prenode->right = node,node->left = prenode;
+        else firstnode = node;
+        prenode = node;
+        if(node->right)inorder(node->right);
+        return;
+    }
+    Node* treeToDoublyList(Node* root) {
+        if(!root)return root;
+        inorder(root);
+        prenode->right = firstnode;
+        firstnode->left = prenode;
+        return firstnode;
+    }
+};
