@@ -1,0 +1,21 @@
+1.回溯dfs
+class Solution {
+public:
+    vector<vector<int>> res;
+    vector<int> path;
+    void dfs(TreeNode* node,int sum){
+        path.push_back(node->val);
+        if(sum-node->val==0&&(!node->left&&!node->right)){
+            res.push_back(path);
+        }
+        if(node->left)dfs(node->left,sum-node->val);
+        if(node->right)dfs(node->right,sum-node->val);
+        path.pop_back();
+        return;
+    }
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+        if(!root)return res;
+        dfs(root,sum);
+        return res;
+    }
+};
