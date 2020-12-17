@@ -1,0 +1,15 @@
+1.投票法 缩减众数所在范围.
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int res=nums[0], sum=1;
+        for(int i =1;i<nums.size();i++){
+            if(res==nums[i])sum++;
+            else sum--;
+            if(sum==0)res=nums[i],sum=1;
+        }
+        return res;
+    }
+};
+2. 排序取中位数
+3. hashmap
