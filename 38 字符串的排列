@@ -1,0 +1,54 @@
+1.不合理的递归方式 o(n的n次方)
+class Solution {
+public:
+    unordered_map <string,bool> visited;
+    unordered_map <int,bool> visitedindex;
+    vector<string> res;
+    void dfs(string &s,string tmp,int p){
+        tmp.push_back(s[p]);
+        visitedindex[p]=true;
+        for(int i=0;i<s.size()&&tmp.size()!=s.size();i++){
+            if(!visitedindex[i])dfs(s,tmp,i);
+        }
+        if(tmp.size()==s.size()){
+            if(!visited[tmp]){
+                visited[tmp]=true;
+                res.push_back(tmp);
+            }
+        }
+        visitedindex[p]=false;
+        return;
+    }
+    vector<string> permutation(string s) {
+        for(int i=0;i<s.size();i++){
+            dfs(s,"",i);
+        }
+        return res;
+    }
+};
+2.合理dfs(每次确定一个位置)
+class Solution {
+public:
+    vector<string> res;
+    void dfs(string s , int index){
+        if(index==s.size()-1){
+            res.push_back(s);
+            return;
+        }
+        dfs(s,index+1);
+        // cout<<s<<endl;
+        for(int i = index+1;i<s.size();i++){
+            if(s[index]!=s[i]){
+                swap(s[index],s[i]);
+                dfs(s,index+1);
+                // swap(s[index],s[i]);
+            }
+        }
+        return;
+    }
+    vector<string> permutation(string s) {
+        sort(s.begin(),s.end());//排序和交换使得同样的元素保持相邻
+        dfs(s,0);
+        return res;
+    }
+};
