@@ -1,0 +1,14 @@
+定位法(计算1在每一位上出现的次数)
+class Solution {
+public:
+    int countDigitOne(int n) {
+        int cur=n%10,high = n/10,low=0,exp=1,sum=0;
+        while(cur!=0||high!=0){
+            if(cur==0)sum += high*exp;
+            else if(cur==1)sum += high*exp+low+1;
+            else sum+=(high+1)*exp;
+            low += cur*exp,cur = high%10,high/=10,exp=(exp>n/10?exp:exp*10);
+        }
+        return sum;
+    }
+};
