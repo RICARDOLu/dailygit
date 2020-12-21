@@ -1,0 +1,33 @@
+1.动态规划
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int n=s.size(),max=1;
+        map<char,int> near;
+        vector<int> dp(n,1);
+        if(n==0)return 0;
+        near[s[0]]=0;
+        for(int i=1;i<n;i++){
+            if(near.find(s[i])==near.end()||(i-near[s[i]])>dp[i-1])dp[i]=dp[i-1]+1;
+            else dp[i]=i-near[s[i]];
+            near[s[i]]=i;
+            max=max<dp[i]?dp[i]:max;
+        }
+        return max;
+    }
+};  
+2.双指针哈希
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char,int> dic;
+        int i=-1,j=0,res=1;
+        if(s.size()==0)return 0;
+        for(int j=0;j<s.size();j++){
+            if(dic.find(s[j])!=dic.end()&&dic[s[j]]>i)i=dic[s[j]];
+            if(res<j-i)res=j-i;
+            dic[s[j]]=j;
+        }
+        return res;
+    }
+};
