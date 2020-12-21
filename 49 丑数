@@ -1,0 +1,17 @@
+1.三链表 dp
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        int a=0,b=0,c=0;
+        vector<int> arr(n,1);
+        for(int i=1;i<n;i++){
+            int a2 = arr[a]*2,b3 = arr[b]*3,c5 = arr[c]*5;
+            int tmp = min({a2,b3,c5});
+            arr[i] = tmp;
+            if(a2==tmp) a++;
+            if(b3==tmp) b++;
+            if(c5==tmp) c++;
+        }
+        return arr[n-1];
+    }
+};
