@@ -1,0 +1,24 @@
+1.双指针
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode *a=headA,*b=headB,*tmp1=headA,*tmp2=headB;
+        while(a&&b){
+            a=a->next,b=b->next;
+        }
+        while(a){
+            a=a->next;
+            tmp1 = tmp1->next;
+        }
+        while(b){
+            b=b->next;
+            tmp2=tmp2->next;
+        }
+        while(tmp1!=tmp2){
+            tmp1=tmp1->next;
+            tmp2=tmp2->next;
+        }
+        return tmp1;
+    }
+};
+2.计算各自链表的长度
