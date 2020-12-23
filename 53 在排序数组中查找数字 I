@@ -1,0 +1,47 @@
+1.二分法查找
+class Solution {
+public:
+    int downsearch(vector<int>& nums,int left ,int right,int target){
+        if(left>right)return -1;
+        if(left==right) return nums[left]==target?left:-1;
+        int mid = (left+right)/2;
+        if(nums[mid]>=target)return downsearch(nums,left,mid,target);
+        return downsearch(nums,mid+1,right,target);
+    }
+    int upsearch(vector<int>& nums,int left ,int right,int target){
+        if(left>right)return -1;
+        if(left==right) return nums[left]==target?left:-1;
+        if(right-left==1)return nums[right]==target?right:left;
+        int mid = (left+right)/2;
+        if(nums[mid]<=target) return upsearch(nums,mid,right,target);
+        return upsearch(nums,left,mid-1,target);
+    }
+    int search(vector<int>& nums, int target) {
+        int first = downsearch(nums,0,nums.size()-1,target);
+        int second = upsearch(nums,0,nums.size()-1,target);
+        if(first==-1||second==-1)return 0;
+        return second-first+1;
+    }
+};
+2.精简二分
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int i=0,j=nums.size()-1,left,right;
+        while(i<=j){//right index
+            int mid = (i+j)/2;
+            if(target>=nums[mid])i=mid+1;
+            else j=mid-1;
+        }
+        right = i;
+        if(j>=0&&nums[j]!=target)return 0;
+        i=0;
+        while(i<=j){
+            int mid = (i+j)/2;
+            if(target<=nums[mid])j=mid-1;
+            else i=mid+1;
+        }
+        left = j;
+        return right-left-1;
+    }
+};
