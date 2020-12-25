@@ -1,0 +1,25 @@
+1.栈
+class Solution {
+public:
+    int kthLargest(TreeNode* root, int k) {
+        stack<TreeNode*> st;
+        TreeNode *last,*tmp;
+        st.push(root);
+        while(!st.empty()){
+            tmp = st.top();
+            if(!tmp)st.pop();
+            else if(tmp==last){
+                st.pop();
+                last = st.empty()?NULL:st.top();
+                if(--k==0)return tmp->val;
+                if(tmp->left){
+                    st.push(tmp->left);
+                }
+            }else{
+                last = tmp;
+                st.push(tmp->right);
+            }
+        }
+        return 0;
+    }
+};
