@@ -1,0 +1,35 @@
+1.栈
+class Solution {
+public:
+    string reverseWords(string s) {
+       string res;
+       stack<char> st;
+       int first=1,lenth = s.size()-1,n=s.size();
+       for(int i=0;i<n;i++){
+           while(i<n&&s[lenth-i]==' ')i++;
+           while(i<n&&s[lenth-i]!=' '){
+               st.push(s[lenth-i]);
+               i++;
+            }
+           while(!st.empty()){
+               res.push_back(st.top());
+               st.pop();
+            }
+            res.push_back(' ');
+       }
+       while(res.back()==' ')res.pop_back();
+       return res;
+    }
+};
+2.冒泡置换
+class Solution {
+public:
+    string reverseLeftWords(string s, int n) {
+        int tmp;
+        for(int i=n;i<s.size();i++){
+            for(int j=i-1;j>=i-n;j--)tmp=s[j],s[j]=s[j+1],s[j+1]=tmp;
+            // for(int j=i-1;j>=i-n;j--)s[j]=s[j]^s[j+1],s[j+1]^=s[j],s[j]=s[j+1]^s[j];
+        }
+        return s;
+    }
+};
