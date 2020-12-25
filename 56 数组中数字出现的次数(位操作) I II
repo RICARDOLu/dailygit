@@ -1,0 +1,37 @@
+1.异或分组
+class Solution {
+public:
+    vector<int> singleNumbers(vector<int>& nums) {
+        int tmp=0,a=0,b=0;
+        vector<int> res;
+        for(int num:nums){
+            tmp^=num;
+        }
+        int divide = tmp&(-tmp);
+        // cout<<divide;
+        for(int num:nums){
+            if((divide&num)==0)a^=num;
+            else b^=num;
+        }
+        res.push_back(a);
+        res.push_back(b);
+        return res;
+    }
+};
+2.出现三次
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        vector<int> triblexor(32,0);
+        unsigned int digit=1;
+        int res=0;
+        for(int num:nums){
+            for(int i=0;i<32;i++)triblexor[i]+=num&1,num=num>>1;
+        }
+        for(int i=0;i<32;i++){
+            res += digit*(triblexor[i]%3);
+            digit*=2;
+        }
+        return res;
+    }
+};
