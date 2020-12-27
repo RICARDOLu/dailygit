@@ -1,0 +1,19 @@
+1.动态规划
+class Solution {
+public:
+    vector<double> getpoint(vector<double> nums,int k,int n){
+        vector<double> res(k*6+1);
+        for(int i=k;i<=6*k;i++){
+            for(int j=1;j<=6;j++){
+                if(i-j>=k-1&&i-j<=6*(k-1))res[i]+=nums[i-j]/6.0;
+            }
+        }
+        if(k==n)return res;
+        return getpoint(res,k+1,n);
+    }
+    vector<double> dicesProbability(int n) {
+        vector<double> res = getpoint(vector<double>(1,1.0),1,n);
+        res.assign(res.begin()+n,res.end());
+        return res;
+    }
+};
