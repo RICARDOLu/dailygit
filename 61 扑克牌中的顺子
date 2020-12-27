@@ -1,0 +1,31 @@
+1.排序 o(nlogn)
+class Solution {
+public:
+    bool isStraight(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        int cutnum=0,zeronum=0;
+        for(int i=0;i<nums.size()-1;i++){
+            if(nums[i]==0)zeronum++;
+            else if(nums[i]==nums[i+1])return false;
+            else cutnum+=nums[i+1]-nums[i]-1;
+        }
+        if(cutnum<=zeronum)return true;
+        else return false;
+    }
+};
+2.max-min<5
+class Solution {
+public:
+    bool isStraight(vector<int>& nums) {
+        unordered_map<int,int> m;
+        int max=INT_MIN,min=INT_MAX;
+        for(int i=0;i<nums.size();i++){
+            if(nums[i]==0)continue;
+            m[nums[i]]++;
+            if(m[nums[i]]>1)return false;
+            max = max>nums[i]?max:nums[i];
+            min = min<nums[i]?min:nums[i];
+        }
+        return (max-min)<5;
+    }
+};
