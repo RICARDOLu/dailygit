@@ -1,0 +1,12 @@
+1,dp
+class Solution {
+public:
+    vector<int> constructArr(vector<int>& a) {
+        int n = a.size();
+        vector<int> b=a;
+        for(int i=n-2;i>=0;i--)b[i]*=b[i+1];
+        for(int i=1;i<n;i++)a[i]*=a[i-1];
+        for(int i=0;i<n;i++)b[i] = (i>0?a[i-1]:1)*(i<n-1?b[i+1]:1);
+        return b;
+    }
+};
