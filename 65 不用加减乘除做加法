@@ -1,0 +1,33 @@
+1.循环位操作
+class Solution {
+public:
+    int add(int a, int b) {
+        int res=0,carry=0;
+        unsigned tmp=1;
+        while(a!=0||b!=0||carry){
+            if((a&1)&&(b&1)){
+                if(carry)res=res|tmp;
+                carry=1;
+            }
+            else if((a&1)||(b&1)){
+                if(!carry)res=res|tmp;
+            }
+            else if(carry)res=res|tmp,carry=0;
+            a=(unsigned int)a>>1,b=(unsigned int)b>>1,tmp = tmp<<1;;
+        }
+        return res;
+    }
+};
+2. a^b 是无进位加法结果, a&b<<1 是进位. 开启新一轮加法.
+class Solution {
+public:
+    int add(int a, int b) {
+        unsigned int c = a&b,d = a^b;
+        while(c){
+            int tmp =d;
+            d = d^(c<<1);
+            c = tmp&(c<<1);
+        }
+        return d;
+    }
+};
