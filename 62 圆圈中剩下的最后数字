@@ -1,0 +1,13 @@
+1. 动态规划
+//当有n-1个环时,最后剩下的序号为a,而如果有n个环时第一个拿出的序号为b,则n个环时剩下的最后一个序号为(a+b+1)%n
+class Solution {
+public:
+    int lastRemaining(int n, int m) {
+         int k,index=0;
+         for(int i=1;i<=n;i++){
+             k = m%i;
+             index = (index+k)%i;
+         }
+         return index;
+    }
+};
